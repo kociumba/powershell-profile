@@ -178,8 +178,10 @@ function Test-CommandExists {
     return $exists
 }
 
-# Editor Configuration
-$EDITOR = if (Test-CommandExists nvim) { 'nvim' }
+# Editor Configuration ⚠️ added my preffered editor - VSCode(insiders)
+$EDITOR = if (Test-CommandExists code-insiders) { 'code-insiders' }
+          elseif (Test-CommandExists code) { 'code' }
+          elseif (Test-CommandExists nvim) { 'nvim' }
           elseif (Test-CommandExists pvim) { 'pvim' }
           elseif (Test-CommandExists vim) { 'vim' }
           elseif (Test-CommandExists vi) { 'vi' }
