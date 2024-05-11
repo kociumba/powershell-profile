@@ -1,3 +1,13 @@
+# oh-my-posh init pwsh --config 'C:\Users\kociu\AppData\Local\Programs\oh-my-posh\themes\bubblesextra.omp.json' | Invoke-Expression
+# neofetch
+# oh-my-posh init pwsh --config 'https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/1_shell.omp.json' | Invoke-Expression
+# oh-my-posh init pwsh --config 'https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/xtoys.omp.json' | Invoke-Expression
+# oh-my-posh init pwsh --config 'https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/microverse-power.omp.json' | Invoke-Expression
+# oh-my-posh init pwsh --config 'https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/di4am0nd.omp.json' | Invoke-Expression
+# oh-my-posh init pwsh --config 'C:/Users/kociu/scoop/apps/oh-my-posh/current/themes/tokyo.omp.json' | Invoke-Expression
+# Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
+# oh-my-posh init pwsh --config 'C:/Users/kociu/scoop/apps/oh-my-posh/current/themes/catppuccin_frappe.omp.json' | Invoke-Expression # light green faktycznie najlepszy
+
 ### PowerShell Profile Refactor
 ### Version 1.03 - Refactored
 
@@ -60,7 +70,7 @@ if (Test-Path($ChocolateyProfile)) {
 # Check for Profile Updates
 function Update-Profile {
     try {
-        $url = "https://raw.githubusercontent.com/ChrisTitusTech/powershell-profile/main/Microsoft.PowerShell_profile.ps1"
+        $url = "https://raw.githubusercontent.com/kociumba/powershell-profile/main/Microsoft.PowerShell_profile.ps1"
         $oldhash = Get-FileHash $PROFILE
         Invoke-RestMethod $url -OutFile "$env:temp/Microsoft.PowerShell_profile.ps1"
         $newhash = Get-FileHash "$env:temp/Microsoft.PowerShell_profile.ps1"
