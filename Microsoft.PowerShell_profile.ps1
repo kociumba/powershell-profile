@@ -262,7 +262,7 @@ function cpy { Set-Clipboard $args[0] }
 
 function pst { Get-Clipboard }
 
-Remove-Alias -Name cd -Force
+Remove-Item -Path Alias:\cd -ErrorAction SilentlyContinue
 
 New-Alias -Name cd -Value z -Force
 
