@@ -262,8 +262,9 @@ function cpy { Set-Clipboard $args[0] }
 
 function pst { Get-Clipboard }
 
+# changes cd to use zoxide instead of Set-Location
+# comment out if you wish to use the default powershell cd
 Remove-Item -Path Alias:\cd -ErrorAction SilentlyContinue
-
 New-Alias -Name cd -Value z -Force
 
 # Enhanced PowerShell Experience
