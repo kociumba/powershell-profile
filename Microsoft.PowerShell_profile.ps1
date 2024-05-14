@@ -437,6 +437,8 @@ function cpy { Set-Clipboard $args[0] }
 
 function pst { Get-Clipboard }
 
+Remove-Alias -Name cd -Force
+
 New-Alias -Name cd -Value z -Force
 
 # Enhanced PowerShell Experience
