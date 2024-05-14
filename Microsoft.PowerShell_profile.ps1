@@ -543,7 +543,7 @@ function Get-Theme {
     }
 =======
 Set-PSReadLineOption -Colors @{
-    Command = 'DarkYellow'
+    Command = 'Yellow'
     Parameter = 'Green'
     String = 'DarkCyan'
 >>>>>>> 9be1de6 (force cd to use zoxide and color testing)
