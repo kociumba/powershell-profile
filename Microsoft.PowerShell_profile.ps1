@@ -279,7 +279,7 @@ New-Alias -Name cd -Value z -Force
 
 # Enhanced PowerShell Experience
 Set-PSReadLineOption -Colors @{
-    Command = 'DarkYellow'
+    Command = 'Yellow'
     Parameter = 'Green'
     String = 'DarkCyan'
 }
