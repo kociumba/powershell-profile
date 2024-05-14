@@ -1,12 +1,12 @@
-# oh-my-posh init pwsh --config 'C:\Users\kociu\AppData\Local\Programs\oh-my-posh\themes\bubblesextra.omp.json' | Invoke-Expression
+# oh-my-posh init pwsh --config '~\AppData\Local\Programs\oh-my-posh\themes\bubblesextra.omp.json' | Invoke-Expression
 # neofetch
 # oh-my-posh init pwsh --config 'https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/1_shell.omp.json' | Invoke-Expression
 # oh-my-posh init pwsh --config 'https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/xtoys.omp.json' | Invoke-Expression
 # oh-my-posh init pwsh --config 'https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/microverse-power.omp.json' | Invoke-Expression
 # oh-my-posh init pwsh --config 'https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/di4am0nd.omp.json' | Invoke-Expression
-# oh-my-posh init pwsh --config 'C:/Users/kociu/scoop/apps/oh-my-posh/current/themes/tokyo.omp.json' | Invoke-Expression
+# oh-my-posh init pwsh --config '~/scoop/apps/oh-my-posh/current/themes/tokyo.omp.json' | Invoke-Expression
 # Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
-# oh-my-posh init pwsh --config 'C:/Users/kociu/scoop/apps/oh-my-posh/current/themes/catppuccin_frappe.omp.json' | Invoke-Expression # light green faktycznie najlepszy
+# oh-my-posh init pwsh --config '~/scoop/apps/oh-my-posh/current/themes/catppuccin_frappe.omp.json' | Invoke-Expression # light green faktycznie najlepszy
 
 ### PowerShell Profile Refactor
 ### Version 1.03 - Refactored
@@ -285,8 +285,10 @@ Set-PSReadLineOption -Colors @{
 }
 
 ## Final Line to set prompt
+# oh my posh config is set to work with a scoop installation
+# if you installed it differentlt just replace the filepath with a link to the raw theme file
 # oh-my-posh init pwsh --config https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/cobalt2.omp.json | Invoke-Expression
-oh-my-posh init pwsh --config 'C:/Users/kociu/scoop/apps/oh-my-posh/current/themes/catppuccin_frappe.omp.json' | Invoke-Expression
+oh-my-posh init pwsh --config '~/scoop/apps/oh-my-posh/current/themes/catppuccin_frappe.omp.json' | Invoke-Expression
 if (Get-Command zoxide -ErrorAction SilentlyContinue) {
     Invoke-Expression (& { (zoxide init powershell | Out-String) })
 } else {
