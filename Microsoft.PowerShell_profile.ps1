@@ -437,12 +437,23 @@ function cpy { Set-Clipboard $args[0] }
 
 function pst { Get-Clipboard }
 
+# color test command
+function Show-Colors( ) {
+    $colors = [Enum]::GetValues( [ConsoleColor] )
+    $max = ($colors | foreach { "$_ ".Length } | Measure-Object -Maximum).Maximum
+    foreach( $color in $colors ) {
+      Write-Host (" {0,2} {1,$max} " -f [int]$color,$color) -NoNewline
+      Write-Host "$color" -Foreground $color
+    }
+  }
+
 # changes cd to use zoxide instead of Set-Location
 # comment out if you wish to use the default powershell cd
 Remove-Item -Path Alias:\cd -ErrorAction SilentlyContinue
 New-Alias -Name cd -Value z -Force
 
 # Enhanced PowerShell Experience
+<<<<<<< HEAD
 # Enhanced PSReadLine Configuration
 $PSReadLineOptions = @{
     EditMode = 'Windows'
@@ -530,6 +541,12 @@ function Get-Theme {
     } else {
         oh-my-posh init pwsh --config https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/cobalt2.omp.json | Invoke-Expression
     }
+=======
+Set-PSReadLineOption -Colors @{
+    Command = 'DarkYellow'
+    Parameter = 'Green'
+    String = 'DarkCyan'
+>>>>>>> 9be1de6 (force cd to use zoxide and color testing)
 }
 
 ## Final Line to set prompt
