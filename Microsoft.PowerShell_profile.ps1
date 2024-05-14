@@ -262,6 +262,8 @@ function cpy { Set-Clipboard $args[0] }
 
 function pst { Get-Clipboard }
 
+New-Alias -Name cd -Value z -Force
+
 # Enhanced PowerShell Experience
 Set-PSReadLineOption -Colors @{
     Command = 'Yellow'
