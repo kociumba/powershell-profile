@@ -270,7 +270,7 @@ function Show-Colors( ) {
       Write-Host (" {0,2} {1,$max} " -f [int]$color,$color) -NoNewline
       Write-Host "$color" -Foreground $color
     }
-  }
+}
 
 # changes cd to use zoxide instead of Set-Location
 # comment out if you wish to use the default powershell cd
