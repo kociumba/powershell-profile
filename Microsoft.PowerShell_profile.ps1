@@ -262,6 +262,16 @@ function cpy { Set-Clipboard $args[0] }
 
 function pst { Get-Clipboard }
 
+# color test command
+function Show-Colors( ) {
+    $colors = [Enum]::GetValues( [ConsoleColor] )
+    $max = ($colors | foreach { "$_ ".Length } | Measure-Object -Maximum).Maximum
+    foreach( $color in $colors ) {
+      Write-Host (" {0,2} {1,$max} " -f [int]$color,$color) -NoNewline
+      Write-Host "$color" -Foreground $color
+    }
+  }
+
 # changes cd to use zoxide instead of Set-Location
 # comment out if you wish to use the default powershell cd
 Remove-Item -Path Alias:\cd -ErrorAction SilentlyContinue
@@ -269,7 +279,7 @@ New-Alias -Name cd -Value z -Force
 
 # Enhanced PowerShell Experience
 Set-PSReadLineOption -Colors @{
-    Command = 'Yellow'
+    Command = 'DarkYellow'
     Parameter = 'Green'
     String = 'DarkCyan'
 }
