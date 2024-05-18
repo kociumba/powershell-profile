@@ -309,20 +309,25 @@ function tinit {
 # initialize a go project with a taskfile
 function goinit {
     param(
+        [Parameter(Mandatory=$true)]
         [string]$name
     )
 
-    try {
-        tinit
-        go mod init $name
-        go mod tidy
-        if (Test-Path .\main.go) {
-            Write-Host "A Go project already exists in this directory." -ForegroundColor Yellow
-        } else {
-            New-Item -Path . -Name main.go -ItemType File -Value "package main"
+    if (-not [string]::IsNullOrWhiteSpace($name)) {
+        try {
+            tinit
+            go mod init $name
+            go mod tidy
+            if (Test-Path .\main.go) {
+                Write-Host "A Go project already exists in this directory." -ForegroundColor Yellow
+            } else {
+                New-Item -Path . -Name main.go -ItemType File -Value "package main"
+            }
+        } catch {
+            Write-Error "Error initializing go project. Error: $_"
         }
-    } catch {
-        Write-Error "Error initializing go project. Error: $_"
+    } else {
+        Write-Host "Please provide a valid name for your go project." -ForegroundColor Red
     }
 }
 
