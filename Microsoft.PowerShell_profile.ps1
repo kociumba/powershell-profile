@@ -453,6 +453,7 @@ Remove-Item -Path Alias:\cd -ErrorAction SilentlyContinue
 New-Alias -Name cd -Value z -Force
 
 # add one letter alias for task couse im lazy
+Remove-Item -Path Alias:\t -ErrorAction SilentlyContinue
 New-Alias -Name t -Value task
 # if you have a task build default this is a shortcut
 function tb {
