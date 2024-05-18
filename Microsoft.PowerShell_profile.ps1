@@ -301,8 +301,9 @@ tasks:
 
 # creates a bare bones Taskfile.yml for go development
 function tinit {
-    New-Item -Path . -Name Taskfile.yml -ItemType File -Value $taskfile
-    
+    if (-not (Test-Path .\Taskfile.yml)) {
+        New-Item -Path . -Name Taskfile.yml -ItemType File -Value $taskfile
+    }
 }
 
 # initialize a go project with a taskfile
