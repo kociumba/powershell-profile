@@ -482,7 +482,10 @@ function tinit {
 
 # initialize a go project with a taskfile
 function goinit {
-    param($name)
+    param(
+        [string]$name
+    )
+
     try {
         tinit
         go mod init $name
@@ -492,6 +495,7 @@ function goinit {
         Write-Error "Error initializing go project. Error: $_"
     }
 }
+
 
 # Enhanced PowerShell Experience
 <<<<<<< HEAD
