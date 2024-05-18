@@ -284,6 +284,39 @@ function tb {
     task build
 }
 
+$taskfile = @"
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+    build:
+        cmds:
+        - go build -C . -o ./bin
+    build-r:
+        cmds:
+        - go build -C . -o ./bin -ldflags "-s -w"
+"@
+
+# creates a bare bones Taskfile.yml for go development
+function tinit {
+    New-Item -Path . -Name Taskfile.yml -ItemType File -Value $taskfile
+    
+}
+
+# initialize a go project with a taskfile
+function goinit {
+    try {
+        tinit
+        param($name)
+        go mod init $name
+        go mod tidy
+        New-Item -Path . -Name main.go -ItemType File -Value "package main"
+    } catch {
+        Write-Error "Error initializing go project. Error: $_"
+    }
+}
+
 # Enhanced PowerShell Experience
 Set-PSReadLineOption -Colors @{
     Command = 'Yellow'
