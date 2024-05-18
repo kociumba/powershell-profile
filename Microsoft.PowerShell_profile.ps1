@@ -307,9 +307,9 @@ function tinit {
 
 # initialize a go project with a taskfile
 function goinit {
+    param($name)
     try {
         tinit
-        param($name)
         go mod init $name
         go mod tidy
         New-Item -Path . -Name main.go -ItemType File -Value "package main"
