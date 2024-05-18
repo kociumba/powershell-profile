@@ -452,6 +452,13 @@ function Show-Colors( ) {
 Remove-Item -Path Alias:\cd -ErrorAction SilentlyContinue
 New-Alias -Name cd -Value z -Force
 
+# add one letter alias for task couse im lazy
+New-Alias -Name t -Value task
+# if you have a task build default this is a shortcut
+function tb {
+    task build
+}
+
 # Enhanced PowerShell Experience
 <<<<<<< HEAD
 # Enhanced PSReadLine Configuration
