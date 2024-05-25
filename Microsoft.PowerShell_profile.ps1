@@ -97,6 +97,7 @@ function Test-CommandExists {
 }
 
 # Editor Configuration ⚠️ added my preffered editor - VSCode(insiders)
+# This will change to zed in the future when it's more feature complete
 $EDITOR = if (Test-CommandExists code-insiders) { 'code-insiders' }
           elseif (Test-CommandExists code) { 'code' }
           elseif (Test-CommandExists nvim) { 'nvim' }
