@@ -1,4 +1,4 @@
-# oh-my-posh init pwsh --config '~\AppData\Local\Programs\oh-my-posh\themes\bubblesextra.omp.json' | Invoke-Expression
+﻿# oh-my-posh init pwsh --config '~\AppData\Local\Programs\oh-my-posh\themes\bubblesextra.omp.json' | Invoke-Expression
 # neofetch
 # oh-my-posh init pwsh --config 'https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/1_shell.omp.json' | Invoke-Expression
 # oh-my-posh init pwsh --config 'https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/xtoys.omp.json' | Invoke-Expression
@@ -298,6 +298,7 @@ tasks:
     build-r:
         cmds:
         - go build -C . -o ./bin -ldflags "-s -w"
+
 "@
 
 # creates a bare bones Taskfile.yml for go development
@@ -322,7 +323,7 @@ function goinit {
             if (Test-Path .\main.go) {
                 Write-Host "A Go project already exists in this directory." -ForegroundColor Yellow
             } else {
-                New-Item -Path . -Name main.go -ItemType File -Value "package main"
+                New-Item -Path . -Name main.go -ItemType File -Value "package main\n"
             }
         } catch {
             Write-Error "Error initializing go project. Error: $_"
@@ -331,6 +332,10 @@ function goinit {
         Write-Host "Please provide a valid name for your go project." -ForegroundColor Red
     }
 }
+
+# all i have to say for this is damn 💀
+Remove-Item -Path Alias:\ai -ErrorAction SilentlyContinue
+New-Alias -Name ai -Value 'ollama run dolphincoder'
 
 
 # Enhanced PowerShell Experience
