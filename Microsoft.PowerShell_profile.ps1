@@ -118,10 +118,12 @@ function Update-PowerShell {
             Write-Host "Updating PowerShell..." -ForegroundColor Yellow
             Start-Process powershell.exe -ArgumentList "-NoProfile -Command winget upgrade Microsoft.PowerShell --accept-source-agreements --accept-package-agreements" -Wait -NoNewWindow
             Write-Host "PowerShell has been updated. Please restart your shell to reflect changes" -ForegroundColor Magenta
-        } else {
+        }
+        else {
             Write-Host "Your PowerShell is up to date." -ForegroundColor Green
         }
-    } catch {
+    }
+    catch {
         Write-Error "Failed to update PowerShell. Error: $_"
     }
 }
@@ -181,15 +183,15 @@ function Test-CommandExists {
 # Editor Configuration ⚠️ added my preffered editor - VSCode(insiders)
 # This will change to zed in the future when it's more feature complete
 $EDITOR = if (Test-CommandExists code-insiders) { 'code-insiders' }
-          elseif (Test-CommandExists code) { 'code' }
-          elseif (Test-CommandExists nvim) { 'nvim' }
-          elseif (Test-CommandExists pvim) { 'pvim' }
-          elseif (Test-CommandExists vim) { 'vim' }
-          elseif (Test-CommandExists vi) { 'vi' }
-          elseif (Test-CommandExists code) { 'code' }
-          elseif (Test-CommandExists notepad++) { 'notepad++' }
-          elseif (Test-CommandExists sublime_text) { 'sublime_text' }
-          else { 'notepad' }
+elseif (Test-CommandExists code) { 'code' }
+elseif (Test-CommandExists nvim) { 'nvim' }
+elseif (Test-CommandExists pvim) { 'pvim' }
+elseif (Test-CommandExists vim) { 'vim' }
+elseif (Test-CommandExists vi) { 'vi' }
+elseif (Test-CommandExists code) { 'code' }
+elseif (Test-CommandExists notepad++) { 'notepad++' }
+elseif (Test-CommandExists sublime_text) { 'sublime_text' }
+else { 'notepad' }
 Set-Alias -Name vim -Value $EDITOR
 
 # Quick Access to Editing the Profile
@@ -289,7 +291,8 @@ function hb {
     
     if (Test-Path $FilePath) {
         $Content = Get-Content $FilePath -Raw
-    } else {
+    }
+    else {
         Write-Error "File path does not exist."
         return
     }
@@ -301,7 +304,8 @@ function hb {
         $url = "http://bin.christitus.com/$hasteKey"
 	Set-Clipboard $url
         Write-Output $url
-    } catch {
+    }
+    catch {
         Write-Error "Failed to upload the document. Error: $_"
     }
 }
@@ -338,8 +342,8 @@ function pgrep($name) {
 }
 
 function head {
-  param($Path, $n = 10)
-  Get-Content $Path -Head $n
+    param($Path, $n = 10)
+    Get-Content $Path -Head $n
 }
 
 function tail {
@@ -442,9 +446,9 @@ function pst { Get-Clipboard }
 function Show-Colors( ) {
     $colors = [Enum]::GetValues( [ConsoleColor] )
     $max = ($colors | foreach { "$_ ".Length } | Measure-Object -Maximum).Maximum
-    foreach( $color in $colors ) {
-      Write-Host (" {0,2} {1,$max} " -f [int]$color,$color) -NoNewline
-      Write-Host "$color" -Foreground $color
+    foreach ( $color in $colors ) {
+        Write-Host (" {0,2} {1,$max} " -f [int]$color, $color) -NoNewline
+        Write-Host "$color" -Foreground $color
     }
 }
 
@@ -476,6 +480,11 @@ tasks:
 
 "@
 
+$main = @"
+package main
+
+"@
+
 # creates a bare bones Taskfile.yml for go development
 function tinit {
     if (-not (Test-Path .\Taskfile.yml)) {
@@ -486,7 +495,7 @@ function tinit {
 # initialize a go project with a taskfile
 function goinit {
     param(
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$name
     )
 
@@ -497,21 +506,25 @@ function goinit {
             go mod tidy
             if (Test-Path .\main.go) {
                 Write-Host "A Go project already exists in this directory." -ForegroundColor Yellow
-            } else {
-                New-Item -Path . -Name main.go -ItemType File -Value "package main\n"
             }
-        } catch {
+            else {
+                # added a newline to the end for git
+                New-Item -Path . -Name main.go -ItemType File -Value $main
+            }
+        }
+        catch {
             Write-Error "Error initializing go project. Error: $_"
         }
-    } else {
+    }
+    else {
         Write-Host "Please provide a valid name for your go project." -ForegroundColor Red
     }
 }
 
-# all i have to say for this is damn 💀
-Remove-Item -Path Alias:\ai -ErrorAction SilentlyContinue
-New-Alias -Name ai -Value 'ollama run dolphincoder'
-
+# fixed this couse alias did not work
+function ai {
+    ollama run dolphincoder
+}
 
 # Enhanced PowerShell Experience
 <<<<<<< HEAD
@@ -604,7 +617,7 @@ function Get-Theme {
     }
 =======
 Set-PSReadLineOption -Colors @{
-    Command = 'Yellow'
+    Command   = 'Yellow'
     Parameter = 'Green'
     String = 'DarkCyan'
 >>>>>>> 9be1de6 (force cd to use zoxide and color testing)
@@ -620,7 +633,8 @@ if (Get-Command zoxide -ErrorAction SilentlyContinue) {
         winget install -e --id ajeetdsouza.zoxide
         Write-Host "zoxide installed successfully. Initializing..."
         Invoke-Expression (& { (zoxide init powershell | Out-String) })
-    } catch {
+    }
+    catch {
         Write-Error "Failed to install zoxide. Error: $_"
     }
 }
