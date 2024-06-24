@@ -380,3 +380,6 @@ else {
         Write-Error "Failed to install zoxide. Error: $_"
     }
 }
+
+# opam configuration
+& "~\AppData\Local\opam\opam-init\init.sh" > $null 2> $null
