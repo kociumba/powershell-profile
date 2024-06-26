@@ -382,4 +382,4 @@ else {
 }
 
 # opam configuration
-& "~\AppData\Local\opam\opam-init\init.sh" > $null 2> $null
+# & "~\AppData\Local\opam\opam-init\init.sh" > $null 2> $null
