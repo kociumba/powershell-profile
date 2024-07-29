@@ -352,6 +352,7 @@ function goinit {
             minit
             go mod init $name
             go mod tidy
+            mkdir build
             if (Test-Path .\main.go) {
                 Write-Host "A Go project already exists in this directory." -ForegroundColor Yellow
             }
