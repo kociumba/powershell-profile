@@ -491,10 +491,10 @@ $makefile = @"
 all: build
 
 build:
-    go build -C . -o ./bin
+    go build -C . -o ./build
 
 r:
-    go build -C . -o ./bin -ldflags "-s -w"
+    go build -C . -o ./build -ldflags "-s -w"
 
 "@
 
