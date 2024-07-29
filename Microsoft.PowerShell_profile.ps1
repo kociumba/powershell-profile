@@ -313,10 +313,29 @@ package main
 
 "@
 
+$makefile = @"
+.PHONY: all build r
+
+all: build
+
+build:
+    go build -C . -o ./bin
+
+r:
+    go build -C . -o ./bin -ldflags "-s -w"
+
+"@
+
 # creates a bare bones Taskfile.yml for go development
 function tinit {
     if (-not (Test-Path .\Taskfile.yml)) {
         New-Item -Path . -Name Taskfile.yml -ItemType File -Value $taskfile
+    }
+}
+
+function minit {
+    if (-not (Test-Path .\makefile)) {
+        New-Item -Path . -Name makefile -ItemType File -Value $makefile
     }
 }
 
@@ -329,7 +348,8 @@ function goinit {
 
     if (-not [string]::IsNullOrWhiteSpace($name)) {
         try {
-            tinit
+            # tinit
+            minit
             go mod init $name
             go mod tidy
             if (Test-Path .\main.go) {
