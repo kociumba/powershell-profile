@@ -486,15 +486,15 @@ package main
 "@
 
 $makefile = @"
-.PHONY: all build r
+all: b
 
-all: build
-
-build:
-    go build -C . -o ./build
+b:
+	go mod tidy
+	go build -o ./build
 
 r:
-    go build -C . -o ./build -ldflags "-s -w"
+	go mod tidy
+	go build -o ./build -ldflags "-s -w"
 
 "@
 
