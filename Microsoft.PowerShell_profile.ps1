@@ -459,6 +459,96 @@ function Get-Theme {
     }
 }
 
+function Compress-Video {
+    param (
+        [Parameter(Mandatory=$true)]
+        [string]$InputFile
+    )
+
+    function Write-Usage {
+        Write-Host "Supported formats: mp4, webm, mkv, mov, avi, flv."
+    }
+
+    function Get-Extension {
+        param (
+            [string]$filePath
+        )
+
+        $fileName = [System.IO.Path]::GetFileName($filePath)
+        $extension = [System.IO.Path]::GetExtension($fileName)
+        return $extension.TrimStart('.')
+    }
+
+    function Get-FilePath-Without-Extension {
+        param (
+            [string]$filePath
+        )
+
+        $extension = Get-Extension -filePath $filePath
+        return $filePath.Substring(0, $filePath.Length - $extension.Length - 1)
+    }
+
+    if (-not (Test-Path -Path $InputFile -PathType Leaf)) {
+        Write-Host "ERROR: Input file '$InputFile' does not exist."
+        return
+    }
+
+    $inputFileExt = Get-Extension -filePath $InputFile
+    $outputFile = "$(Get-FilePath-Without-Extension -filePath $InputFile)_compressed.$inputFileExt"
+
+    # Default to libx264 and aac for unknown formats
+    $vcodec = "libx264"
+    $acodec = "aac"
+    $formatOpt = ""
+
+    switch ($inputFileExt) {
+        "mp4" {
+            $vcodec = "libx264"
+            $acodec = "aac"
+        }
+        "mov" {
+            $vcodec = "libx264"
+            $acodec = "aac"
+            $formatOpt = "-f mov"
+        }
+        "webm" {
+            $vcodec = "libvpx-vp9"
+            $acodec = "libopus"
+        }
+        "mkv" {
+            $vcodec = "libx265"
+            $acodec = "libopus"
+        }
+        "avi" {
+            $vcodec = "libx264"
+            $acodec = "aac"
+            $formatOpt = "-f mp4"
+            $outputFile = "$(Get-FilePath-Without-Extension -filePath $InputFile)_compressed.mp4"
+        }
+        "flv" {
+            $vcodec = "libx264"
+            $acodec = "aac"
+            $formatOpt = "-f mp4"
+            $outputFile = "$(Get-FilePath-Without-Extension -filePath $InputFile)_compressed.mp4"
+        }
+        default {
+            Write-Host "WARNING: Unsupported video format, trying with default codecs...";
+        }
+    }
+
+    Write-Host "Compressing video, this could take a while..."
+    $ffmpegCmd = "ffmpeg -i `"$InputFile`" -c:v $vcodec -crf 23 -preset medium -c:a $acodec $formatOpt `"$outputFile`""
+    Invoke-Expression $ffmpegCmd
+    if ($?) {
+        Write-Host "Compression completed successfully."
+        Write-Host "Output file: $outputFile"
+    }
+    else {
+        Write-Host "ERROR: Compression failed."
+        Write-Host "Make sure you have ffmpeg installed."
+    }
+}
+
 ## Final Line to set prompt
 # oh my posh config is set to work with a scoop installation
 # if you installed it differentlt just replace the filepath with a link to the raw theme file
