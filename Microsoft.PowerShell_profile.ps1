@@ -462,11 +462,23 @@ function Get-Theme {
 function Compress-Video {
     param (
         [Parameter(Mandatory=$true)]
-        [string]$InputFile
+        [string]$InputFile,
+        
+        [Parameter(Mandatory=$false)]
+        [ValidateRange(0,51)]
+        [int]$CRF = 23,
+        
+        [Parameter(Mandatory=$false)]
+        [ValidateSet("ultrafast", "superfast", "veryfast", "faster", "fast", "medium", "slow", "slower", "veryslow")]
+        [string]$Preset = "medium"
     )
 
     function Write-Usage {
         Write-Host "Supported formats: mp4, webm, mkv, mov, avi, flv."
+        Write-Host "Optional parameters:"
+        Write-Host "  -CRF <0-51>: Constant Rate Factor (default: 23, lower is higher quality)"
+        Write-Host "  -Preset <ultrafast|superfast|veryfast|faster|fast|medium|slow|slower|veryslow>"
+        Write-Host "    (default: medium, slower presets give better compression)"
     }
 
     function Get-Extension {
@@ -490,6 +502,7 @@ function Compress-Video {
 
     if (-not (Test-Path -Path $InputFile -PathType Leaf)) {
         Write-Host "ERROR: Input file '$InputFile' does not exist."
+        Write-Usage
         return
     }
 
@@ -536,8 +549,8 @@ function Compress-Video {
         }
     }
 
-    Write-Host "Compressing video, this could take a while..."
-    $ffmpegCmd = "ffmpeg -i `"$InputFile`" -c:v $vcodec -crf 23 -preset medium -c:a $acodec $formatOpt `"$outputFile`""
+    Write-Host "Compressing video with CRF $CRF and preset $Preset, this could take a while..."
+    $ffmpegCmd = "ffmpeg -i `"$InputFile`" -c:v $vcodec -crf $CRF -preset $Preset -c:a $acodec $formatOpt `"$outputFile`""
     Invoke-Expression $ffmpegCmd
     if ($?) {
         Write-Host "Compression completed successfully."
