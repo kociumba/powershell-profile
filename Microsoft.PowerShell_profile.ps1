@@ -582,6 +582,9 @@ if (Get-Command zoxide -ErrorAction SilentlyContinue) {
     }
 }
 
+# Get the completions for task
+Invoke-Expression  (&task --completion powershell | Out-String)
+
 # Help Function
 function Show-Help {
     @"
