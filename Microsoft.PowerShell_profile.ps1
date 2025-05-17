@@ -8,6 +8,16 @@
 # Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
 # oh-my-posh init pwsh --config '~/scoop/apps/oh-my-posh/current/themes/catppuccin_frappe.omp.json' | Invoke-Expression # light green faktycznie najlepszy
 
+# oh-my-posh init pwsh --config '~\AppData\Local\Programs\oh-my-posh\themes\bubblesextra.omp.json' | Invoke-Expression
+# neofetch
+# oh-my-posh init pwsh --config 'https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/1_shell.omp.json' | Invoke-Expression
+# oh-my-posh init pwsh --config 'https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/xtoys.omp.json' | Invoke-Expression
+# oh-my-posh init pwsh --config 'https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/microverse-power.omp.json' | Invoke-Expression
+# oh-my-posh init pwsh --config 'https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/di4am0nd.omp.json' | Invoke-Expression
+# oh-my-posh init pwsh --config '~/scoop/apps/oh-my-posh/current/themes/tokyo.omp.json' | Invoke-Expression
+# Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
+# oh-my-posh init pwsh --config '~/scoop/apps/oh-my-posh/current/themes/catppuccin_frappe.omp.json' | Invoke-Expression # light green faktycznie najlepszy
+
 ### PowerShell Profile Refactor
 ### Version 1.03 - Refactored
 
@@ -120,8 +130,12 @@ function Update-PowerShell {
             Write-Host "PowerShell has been updated. Please restart your shell to reflect changes" -ForegroundColor Magenta
         }
         else {
+        }
+        else {
             Write-Host "Your PowerShell is up to date." -ForegroundColor Green
         }
+    }
+    catch {
     }
     catch {
         Write-Error "Failed to update PowerShell. Error: $_"
@@ -180,6 +194,18 @@ function Test-CommandExists {
     return $exists
 }
 
+# Editor Configuration ⚠️ added my preffered editor - VSCode(insiders)
+# This will change to zed in the future when it's more feature complete
+$EDITOR = if (Test-CommandExists code-insiders) { 'code-insiders' }
+elseif (Test-CommandExists code) { 'code' }
+elseif (Test-CommandExists nvim) { 'nvim' }
+elseif (Test-CommandExists pvim) { 'pvim' }
+elseif (Test-CommandExists vim) { 'vim' }
+elseif (Test-CommandExists vi) { 'vi' }
+elseif (Test-CommandExists code) { 'code' }
+elseif (Test-CommandExists notepad++) { 'notepad++' }
+elseif (Test-CommandExists sublime_text) { 'sublime_text' }
+else { 'notepad' }
 # Editor Configuration ⚠️ added my preffered editor - VSCode(insiders)
 # This will change to zed in the future when it's more feature complete
 $EDITOR = if (Test-CommandExists code-insiders) { 'code-insiders' }
@@ -293,6 +319,8 @@ function hb {
         $Content = Get-Content $FilePath -Raw
     }
     else {
+    }
+    else {
         Write-Error "File path does not exist."
         return
     }
@@ -304,6 +332,8 @@ function hb {
         $url = "http://bin.christitus.com/$hasteKey"
 	Set-Clipboard $url
         Write-Output $url
+    }
+    catch {
     }
     catch {
         Write-Error "Failed to upload the document. Error: $_"
@@ -342,6 +372,8 @@ function pgrep($name) {
 }
 
 function head {
+    param($Path, $n = 10)
+    Get-Content $Path -Head $n
     param($Path, $n = 10)
     Get-Content $Path -Head $n
 }
@@ -441,6 +473,111 @@ function flushdns {
 function cpy { Set-Clipboard $args[0] }
 
 function pst { Get-Clipboard }
+
+# color test command
+function Show-Colors( ) {
+    $colors = [Enum]::GetValues( [ConsoleColor] )
+    $max = ($colors | foreach { "$_ ".Length } | Measure-Object -Maximum).Maximum
+    foreach ( $color in $colors ) {
+        Write-Host (" {0,2} {1,$max} " -f [int]$color, $color) -NoNewline
+        Write-Host "$color" -Foreground $color
+    }
+}
+
+# changes cd to use zoxide instead of Set-Location
+# comment out if you wish to use the default powershell cd
+Remove-Item -Path Alias:\cd -ErrorAction SilentlyContinue
+New-Alias -Name cd -Value z -Force
+
+# add one letter alias for task couse im lazy
+Remove-Item -Path Alias:\t -ErrorAction SilentlyContinue
+New-Alias -Name t -Value task
+# if you have a task build default this is a shortcut
+function tb {
+    task build
+}
+
+$taskfile = @"
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+    build:
+        cmds:
+        - go build -C . -o ./bin
+    build-r:
+        cmds:
+        - go build -C . -o ./bin -ldflags "-s -w"
+
+"@
+
+$main = @"
+package main
+
+"@
+
+$makefile = @"
+all: b
+
+b:
+	go mod tidy
+	go build -o ./build
+
+r:
+	go mod tidy
+	go build -o ./build -ldflags "-s -w"
+
+"@
+
+# creates a bare bones Taskfile.yml for go development
+function tinit {
+    if (-not (Test-Path .\Taskfile.yml)) {
+        New-Item -Path . -Name Taskfile.yml -ItemType File -Value $taskfile
+    }
+}
+
+function minit {
+    if (-not (Test-Path .\makefile)) {
+        New-Item -Path . -Name makefile -ItemType File -Value $makefile
+    }
+}
+
+# initialize a go project with a taskfile
+function goinit {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$name
+    )
+
+    if (-not [string]::IsNullOrWhiteSpace($name)) {
+        try {
+            # tinit
+            minit
+            go mod init $name
+            go mod tidy
+            mkdir build
+            if (Test-Path .\main.go) {
+                Write-Host "A Go project already exists in this directory." -ForegroundColor Yellow
+            }
+            else {
+                # added a newline to the end for git
+                New-Item -Path . -Name main.go -ItemType File -Value $main
+            }
+        }
+        catch {
+            Write-Error "Error initializing go project. Error: $_"
+        }
+    }
+    else {
+        Write-Host "Please provide a valid name for your go project." -ForegroundColor Red
+    }
+}
+
+# fixed this couse alias did not work
+function ai {
+    ollama run dolphincoder
+}
 
 # color test command
 function Show-Colors( ) {
@@ -748,6 +885,10 @@ function Compress-Video {
 }
 
 ## Final Line to set prompt
+# oh my posh config is set to work with a scoop installation
+# if you installed it differentlt just replace the filepath with a link to the raw theme file
+# oh-my-posh init pwsh --config https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/cobalt2.omp.json | Invoke-Expression
+oh-my-posh init pwsh --config '~/scoop/apps/oh-my-posh/current/themes/catppuccin_frappe.omp.json' | Invoke-Expression
 Get-Theme
 if (Get-Command zoxide -ErrorAction SilentlyContinue) {
     Invoke-Expression (& { (zoxide init --cmd cd powershell | Out-String) })
@@ -759,6 +900,8 @@ if (Get-Command zoxide -ErrorAction SilentlyContinue) {
         Invoke-Expression (& { (zoxide init powershell | Out-String) })
     }
     catch {
+    }
+    catch {
         Write-Error "Failed to install zoxide. Error: $_"
     }
 }
@@ -766,8 +909,11 @@ if (Get-Command zoxide -ErrorAction SilentlyContinue) {
 # Get the completions for task
 Invoke-Expression  (&task --completion powershell | Out-String)
 
-Set-Alias -Name z -Value __zoxide_z -Option AllScope -Scope Global -Force
-Set-Alias -Name zi -Value __zoxide_zi -Option AllScope -Scope Global -Force
+# Get the completions for task
+Invoke-Expression  (&task --completion powershell | Out-String)
+
+# Get the completions for task
+Invoke-Expression  (&task --completion powershell | Out-String)
 
 # Help Function
 function Show-Help {
