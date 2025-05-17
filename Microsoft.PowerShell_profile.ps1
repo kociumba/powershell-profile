@@ -685,7 +685,7 @@ function ai {
 }
 
 # Enhanced PowerShell Experience
-<<<<<<< HEAD
+
 # Enhanced PSReadLine Configuration
 $PSReadLineOptions = @{
     EditMode = 'Windows'
@@ -773,12 +773,10 @@ function Get-Theme {
     } else {
         oh-my-posh init pwsh --config https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/catppuccin_frappe.omp.json | Invoke-Expression
     }
-=======
 Set-PSReadLineOption -Colors @{
     Command   = 'Yellow'
     Parameter = 'Green'
     String = 'DarkCyan'
->>>>>>> 9be1de6 (force cd to use zoxide and color testing)
 }
 
 function Compress-Video {
