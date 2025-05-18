@@ -778,6 +778,7 @@ Set-PSReadLineOption -Colors @{
     Parameter = 'Green'
     String = 'DarkCyan'
 }
+}
 
 function Compress-Video {
     param (
